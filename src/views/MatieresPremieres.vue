@@ -1,21 +1,21 @@
 <template>
   <div>
     <h1>Liste des matières premières</h1>
-    <ul v-for="mp in matieresPremieres" :key='mp.id'>
+    <ul v-for="mp in allMatieresPremieres" :key='mp.nom'>
       <li @click='selectMP(mp)'>  
-        {{mp.nom}} | {{mp.fournisseur}} | {{ mp.lot }} | {{ mp.dlc }} | {{ mp.qCommande }}
+         {{mp.nom}} | {{mp.fournisseur}} | {{ mp.lot }} | {{ mp.dlc }} | {{ mp.qCommande }}
       </li>
     </ul>
     <button @click="showAjoutMP = !showAjoutMP" v-show="!showAjoutMP">Ajouter une Matiere Premiere</button>
     <AjoutMatierePremiere v-show="showAjoutMP" @termine='termine'></AjoutMatierePremiere>
-    <MatierePremiere v-if="mpDetail" v-bind:mp=mpDetail>
+    <MatierePremiere v-bind:mp=mpDetail>
     </MatierePremiere>
 
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+//import { mapGetters } from "vuex";
 import AjoutMatierePremiere from '../components/AjoutMatierePremiere.vue';
 import MatierePremiere from '../components/MatierePremiere.vue'
 
@@ -23,13 +23,17 @@ export default {
 
   data() {
     return {
-      mpDetail: null,
       showAjoutMP: false,
 
     }
   },
   computed: {
-    ...mapState(["matieresPremieres"]),
+    allMatieresPremieres() {
+      return this.$store.getters.allMatieresPremieres;
+    },
+    mpDetail() {
+      return this.$store.state.detailMatierePremiere;
+    }   
   },
   components: {
     MatierePremiere,
@@ -38,7 +42,7 @@ export default {
   methods: {
     selectMP(mp) 
     {
-      this.mpDetail = mp
+      this.$store.dispatch("getMatierePremiere", {matierePremiere : mp});
       console.log('la mp : '+mp.nom)
       console.log('mpDétail : '+ this.mpDetail.nom)
     },
@@ -49,7 +53,6 @@ export default {
     }
   },
   mounted() {
-    console.log('composant monté')
     this.$store.dispatch("getMatieresPremieres");
   }
 
