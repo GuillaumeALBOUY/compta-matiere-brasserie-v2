@@ -19,10 +19,11 @@ export default {
       Vue.set(state, 'matieresPremieres', matieresPremieres);
     },
     ADD_MATIERES_PREMIERES(state, matierePremiere) {
+      matierePremiere.totalConso = 0;
       state.matieresPremieres.push(matierePremiere);
     },
-    SET_DETAIL_MATIERE_PREMIERE (state, matierePremiere) {
-      state.detailMatierePremiere=matierePremiere;
+    SET_DETAIL_MATIERE_PREMIERE(state, matierePremiere) {
+      state.detailMatierePremiere = matierePremiere;
     }
   },
   actions: {
@@ -33,24 +34,46 @@ export default {
         })
     },
 
-    getMatierePremiere({ commit }, payload ) {
-      axios.get(api.urlBackEnd + ':' + api.portBackEnd + '/api/stockmp/'+ payload.matierePremiere.nom)
-            .then(response => { console.log("matiere premiere obtenue : "+response);
-            commit('SET_DETAIL_MATIERE_PREMIERE',response.data)})
+    getMatierePremiere({ commit }, payload) {
+      axios.get(api.urlBackEnd + ':' + api.portBackEnd + '/api/stockmp/' + payload.matierePremiere.ref)
+        .then(response => {
+          console.log("matiere premiere obtenue : " + response);
+          commit('SET_DETAIL_MATIERE_PREMIERE', response.data)
+        })
 
     },
 
     setMatierePremiere({ commit }, payload) {
+      console.log("set matiere premiere ");
       const body = { matiere: payload.matiere };
-      axios.post(api.urlBackEnd + ':' + api.portBackEnd + '/api/stockmp/', body)
-        .then(
-          /*axios.get(api.urlBackEnd + ':' + api.portBackEnd + '/api/stockmp/') // TODO : partie de code à factoriser avec plus haut
-          .then(response => {
-          commit('SET_MATIERES_PREMIERES', response.data)})*/
-          commit('ADD_MATIERES_PREMIERES', body.matiere)
-        );
+      if (body.matiere.ref == undefined) {
+        console.log("ajout matiere premiere ");
+        body.matiere.ref = body.matiere.nom + Date.now();
+        axios.post(api.urlBackEnd + ':' + api.portBackEnd + '/api/stockmp/', body)
+          .then(() => {
+            axios.get(api.urlBackEnd + ':' + api.portBackEnd + '/api/stockmp/') // TODO : partie de code à factoriser avec plus haut
+              .then(response => {
+                //console.log("Mise à jour de la liste de matieres premieres "+ JSON.stringify(response.data));
+                commit('SET_MATIERES_PREMIERES', response.data)
+              })
+          }
+          );
+      } else {
+        console.log("mise à jour matiere premiere ");
+        axios.put(api.urlBackEnd + ':' + api.portBackEnd + '/api/stockmp/' + body.matiere.ref, body)
+          .then(() => {
+            axios.get(api.urlBackEnd + ':' + api.portBackEnd + '/api/stockmp/') // TODO : partie de code à factoriser avec plus haut
+              .then(response => {
+                //console.log("Mise à jour de la liste de matieres premieres "+ JSON.stringify(response.data));
+                commit('SET_MATIERES_PREMIERES', response.data)
+              })
+          }
+          );
+      }
 
-    }
+    },
+
+
 
   },
   modules: {

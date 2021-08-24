@@ -36,10 +36,7 @@ export default {
     ajouter() {
 
         console.log("matiere premiere ajoutée : "+ this.mp.nom + " " + this.mp.dlc);
-
         this.$store.dispatch("setMatierePremiere", { matiere: this.mp});
-
-
         this.$emit('termine', {message: 'Matiere première ajoutée'})
     },
     

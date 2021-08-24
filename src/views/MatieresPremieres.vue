@@ -1,13 +1,13 @@
 <template>
   <div>
     <h1>Liste des matières premières</h1>
-    <ul v-for="mp in allMatieresPremieres" :key='mp.nom'>
+    <ul v-for="mp in allMatieresPremieres" :key='mp.ref'>
       <li @click='selectMP(mp)'>  
-         {{mp.nom}} | {{mp.fournisseur}} | {{ mp.lot }} | {{ mp.dlc }} | {{ mp.qCommande }}
+         {{mp.nom}} | {{mp.fournisseur}} | {{ mp.lot }} | {{ mp.dlc }} | {{ mp.qCommande }} | {{ parseInt(mp.qCommande) + parseInt(mp.totalConso)}}
       </li>
     </ul>
     <button @click="showAjoutMP = !showAjoutMP" v-show="!showAjoutMP">Ajouter une Matiere Premiere</button>
-    <AjoutMatierePremiere v-show="showAjoutMP" @termine='termine'></AjoutMatierePremiere>
+    <AjoutMatierePremiere v-if="showAjoutMP" @termine='termine'></AjoutMatierePremiere>
     <MatierePremiere v-bind:mp=mpDetail>
     </MatierePremiere>
 
@@ -33,7 +33,8 @@ export default {
     },
     mpDetail() {
       return this.$store.state.detailMatierePremiere;
-    }   
+    },
+    
   },
   components: {
     MatierePremiere,
@@ -43,12 +44,11 @@ export default {
     selectMP(mp) 
     {
       this.$store.dispatch("getMatierePremiere", {matierePremiere : mp});
-      console.log('la mp : '+mp.nom)
-      console.log('mpDétail : '+ this.mpDetail.nom)
     },
     termine(payload) {
       this.showAjoutMP= false;
       console.log(payload.message)
+//      this.$store.dispatch("getMatieresPremieres");
 
     }
   },
