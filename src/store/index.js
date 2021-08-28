@@ -7,7 +7,7 @@ export default {
   state: {
     nomBrasserie: "L'embrasserie",
     matieresPremieres: [],
-    detailMatierePremiere: null
+    detailMatierePremiere: null,
 
   },
   getters: {
