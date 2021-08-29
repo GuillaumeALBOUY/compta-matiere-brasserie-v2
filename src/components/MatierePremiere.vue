@@ -3,15 +3,13 @@
     <h2>Détail mp</h2>
     <div v-if="mp && mp.nom">
       <h3>Récap {{ mp.nom }}</h3>
-      <ul>
-        <li v-for="(value, name) in mp" :key="name">
-          {{ name }} : {{ value }}
-        </li>
-      </ul>
+      Fournisseur {{ mp.fournisseur }}, lot numéro : {{ mp.lot }} <br/>
+      A consomer avant le {{ mp.dlc | formatDate }}
+      Quantité commandée : {{ mp. qCommande }}
       <h3>Historique</h3>
       <ul>
         <li v-for="mouvement in mp.mouvements" :key="mouvement._id">
-          Le {{ mouvement.date }}, {{ mouvement.quantite }}
+          Le {{ mouvement.date | formatDate }}, {{ mouvement.quantite }} pour
           {{ mouvement.brassin }} {{ mouvement.motif }}
         </li>
       </ul>

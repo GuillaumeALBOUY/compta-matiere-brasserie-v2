@@ -7,7 +7,7 @@
         :key="brassin.ref"
         @click="selectBrassin(brassin)"
       >
-        {{ brassin.date }} | {{ brassin.nom }}
+        {{ brassin.date | formatDate }} | {{ brassin.nom }}
       </li>
     </ul>
     <button

@@ -3,7 +3,7 @@
     <h1>Liste des matières premières</h1>
     <ul v-for="mp in allMatieresPremieres" :key='mp.ref'>
       <li @click='selectMP(mp)'>  
-         {{mp.nom}} | {{mp.fournisseur}} | {{ mp.lot }} | {{ mp.dlc }} | {{ mp.qCommande }} | {{ parseInt(mp.qCommande) + parseInt(mp.totalConso)}}
+         {{mp.nom}} | {{mp.fournisseur}} | {{ mp.lot }} | {{ mp.dlc | formatDate }} | {{ mp.qCommande }} | {{ parseInt(mp.qCommande) + parseInt(mp.totalConso)}}
       </li>
     </ul>
     <button @click="showAjoutMP = !showAjoutMP" v-show="!showAjoutMP">Ajouter une Matiere Premiere</button>

@@ -6,11 +6,17 @@ import router from './router'
 import storeDeclaration from './store'
 
 
-Vue.config.productionTip = false
-Vue.use(VueRouter)
-Vue.use(Vuex)
+Vue.config.productionTip = false;
+Vue.use(VueRouter);
+Vue.use(Vuex);
 
-const store= new Vuex.Store(storeDeclaration)
+//Filtre de formatage des dates
+Vue.filter('formatDate',
+  (value) => (new Date(value)).toLocaleDateString('fr-FR',
+    { weekday: "long", year: "numeric", month: "long", day: "numeric" }))
+
+
+const store = new Vuex.Store(storeDeclaration)
 
 new Vue({
   router,

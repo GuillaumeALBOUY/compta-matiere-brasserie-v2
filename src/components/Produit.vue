@@ -6,7 +6,7 @@
 
     <ul v-for="mouvement in produit.mouvements" :key="mouvement._id">
       <li>
-        {{ mouvement.date }} | {{ mouvement.quantite }} | {{ mouvement.motif }}
+        {{ mouvement.date | formatDate }} | {{ mouvement.quantite }} | {{ mouvement.motif }}
       </li>
     </ul>
 

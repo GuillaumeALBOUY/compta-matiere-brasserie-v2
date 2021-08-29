@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="brassin != null">
-      <h2>{{ brassin.nom }} du {{ brassin.date }}</h2>
+      <h2>{{ brassin.nom }} du {{ brassin.date | formatDate }}</h2>
 
       <h3>Matières Premières</h3>
       <ul v-if="matieres.length > 0">
