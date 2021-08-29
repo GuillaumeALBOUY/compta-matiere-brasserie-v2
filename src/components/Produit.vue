@@ -2,7 +2,7 @@
   <div>
     <h2>Historique du produit</h2>
     {{ produit.nom }} en {{ produit.conditionnement }}cl <span v-if='brassin!=null'> issu du brassin  
-    {{ brassin.nom }} du {{ brassin.date }} </span>
+    {{ brassin.nom }} du {{ brassin.date | formatDate }} </span>
 
     <ul v-for="mouvement in produit.mouvements" :key="mouvement._id">
       <li>
