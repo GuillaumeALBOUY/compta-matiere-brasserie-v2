@@ -15,11 +15,41 @@
       </button>
       <AjoutMPBrassin
         v-if="showAjoutMP"
-        @termine="termine"
+        @termine="termineMP"
         :brassin="brassin"
       ></AjoutMPBrassin>
 
       <h3>Produits</h3>
+      <ul v-if="produits.length > 0">
+        <li v-for="produit in produits" :key="produit.ref">
+          {{ produit.nom }} - {{ produit.conditionnement }}cl :
+          {{ produit.quantite }} unités
+          <button
+            @click="produit.showModif = !produit.showModif"
+            v-if="!produit.showModif"
+          >
+            Produire
+          </button>
+          <span v-if="produit.showModif">
+            <input type="date" v-model="produit.modifDate" />
+            <input type="number" v-model="produit.quantiteProduite" />
+            <button @click="modifProduit(produit)">
+              ajouter
+            </button>
+            <button @click="produit.showModif = !produit.showModif">
+              annuler
+            </button>
+          </span>
+        </li>
+      </ul>
+      <button @click="showCreerProduit = !showCreerProduit">
+        Ajouter un conditionnement
+      </button>
+      <ajout-produit
+        v-if="showCreerProduit"
+        @termine="termineProduit"
+        :brassin="brassin"
+      ></ajout-produit>
     </div>
   </div>
 </template>
@@ -28,7 +58,7 @@
 import axios from "axios";
 import api from "../config/url";
 import AjoutMPBrassin from "./AjoutMPBrassin.vue";
-
+import AjoutProduit from "./AjoutProduit.vue";
 export default {
   props: ["brassin"],
 
@@ -36,25 +66,68 @@ export default {
     return {
       matieres: [],
       showAjoutMP: false,
+      produits: [],
+      showCreerProduit: false,
     };
   },
-  
-  computed: {
 
+  computed: {
     temoinMajMP() {
       return this.$store.state.matieresPremieres;
-    }
-
+    },
   },
 
   components: {
     AjoutMPBrassin,
+    AjoutProduit,
   },
 
   methods: {
-    termine() {
+    termineMP() {
       //console.log('ajout terminé');
       this.showAjoutMP = false;
+    },
+
+    termineProduit() {
+      this.showCreerProduit = false;
+      this.loadProduitBrassin();
+    },
+
+    modifProduit(produit) {
+      this.showCreerProduit = false;
+      // récupération du produit en base
+      axios
+        .get(
+          api.urlBackEnd +
+            ":" +
+            api.portBackEnd +
+            "/api/stockproduit/" +
+            produit.ref
+        )
+        .then(
+          // ajout de la quantite produite
+          (response) => {
+            const newProduit = response.data;
+            newProduit.mouvements.push({
+              date: produit.modifDate,
+              quantite: produit.quantiteProduite,
+              motif: "mise en bouteille",
+            });
+            axios
+              .put(
+                api.urlBackEnd +
+                  ":" +
+                  api.portBackEnd +
+                  "/api/stockproduit/" +
+                  produit.ref,
+                { produit: newProduit }
+              )
+              .then(() => {
+                produit.showModif = false;
+                this.loadProduitBrassin();
+              });
+          }
+        );
     },
 
     loadMPBrassin() {
@@ -79,6 +152,34 @@ export default {
           });
         });
     },
+
+    loadProduitBrassin() {
+      axios
+        .get(
+          api.urlBackEnd +
+            ":" +
+            api.portBackEnd +
+            "/api/stockproduit/brassin/" +
+            this.brassin.ref
+        )
+        .then((response) => {
+          this.produits = response.data.map((produit) => {
+            const reducer = (accumulator, mouvement) =>
+              mouvement.quantite > 0
+                ? accumulator + mouvement.quantite
+                : accumulator;
+            return {
+              nom: produit.nom,
+              conditionnement: produit.conditionnement,
+              ref: produit.ref,
+              quantite: produit.mouvements.reduce(reducer, 0),
+              showModif: false,
+              modifDate: "",
+              quantiteProduite: 0,
+            };
+          });
+        });
+    },
   },
 
   watch: {
@@ -93,6 +194,7 @@ export default {
 
   mounted() {
     this.loadMPBrassin();
+    this.loadProduitBrassin();
   },
 };
 </script>
