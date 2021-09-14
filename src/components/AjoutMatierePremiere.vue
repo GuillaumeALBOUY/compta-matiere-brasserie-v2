@@ -1,14 +1,26 @@
 <template>
   <div>
     <h2>Ajout de matiere Première</h2>
-    <label for="nom"> Nom : </label> <input type="text" v-model="mp.nom"/> <br />
-    <label for="fournisseur"> Fournisseur : </label> <input type="text" v-model="mp.fournisseur"/><br />
-    <label for="lot"> Lot : </label> <input type="text" v-model="mp.lot"/><br />
+    <select v-model="mp.type">
+      <option disabled value="">Choisissez</option>
+      <option>malt</option>
+      <option>houblon</option>
+      <option>autre</option>
+    </select>
+    <br />
+    <label for="nom"> Nom : </label> <input type="text" v-model="mp.nom" />
+    <br />
+    <label for="fournisseur"> Fournisseur : </label>
+    <input type="text" v-model="mp.fournisseur" /><br />
+    <label for="lot"> Lot : </label>
+    <input type="text" v-model="mp.lot" /><br />
     <label for="dlc"> Date limite de consomation </label>
-    <input type="date" v-model="mp.dlc"/><br />
-    <label for="qCommande" > Quantité commandée </label>
-    <input type="number" v-model="mp.qCommande"/><br />
-    <button @click="ajouter">Ajouter</button> <button @click="retour">Annuler</button>
+    <input type="date" v-model="mp.dlc" /><br />
+    <label for="qCommande"> Quantité commandée </label>
+    <input type="number" v-model="mp.qCommande" /><br />
+    {{ message }} <br />
+    <button @click="ajouter">Ajouter</button>
+    <button @click="retour">Annuler</button>
   </div>
 </template>
 
@@ -20,26 +32,39 @@ export default {
   data() {
     return {
       mp: {
-        nom:"",
-        fournisseur:"",
-        lot:"",
-        dlc:"",
-        qCommande:0,
-      }
-
-    }
+        type: "",
+        nom: "",
+        fournisseur: "",
+        lot: "",
+        dlc: "",
+        qCommande: 0,
+        archive: false,
+      },
+      message: "",
+    };
   },
   methods: {
     retour() {
-        this.$emit('termine', {message: 'Action annulée'})
+      this.$emit("termine", { message: "Action annulée" });
     },
     ajouter() {
-
-        console.log("matiere premiere ajoutée : "+ this.mp.nom + " " + this.mp.dlc);
-        this.$store.dispatch("setMatierePremiere", { matiere: this.mp});
-        this.$emit('termine', {message: 'Matiere première ajoutée'})
+      if (
+        this.mp.type == "" ||
+        this.mp.nom == "" ||
+        this.mp.fournisseur == "" ||
+        this.mp.lot == "" ||
+        this.mp.dlc == "" ||
+        this.mp.qCommande == 0
+      ) {
+        this.message = "Toutes les données sont obligatoires";
+      } else {
+        console.log(
+          "matiere premiere ajoutée : " + this.mp.nom + " " + this.mp.dlc
+        );
+        this.$store.dispatch("setMatierePremiere", { matiere: this.mp });
+        this.$emit("termine", { message: "Matiere première ajoutée" });
+      }
     },
-    
   },
 };
 </script>
