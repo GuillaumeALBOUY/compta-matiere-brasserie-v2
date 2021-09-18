@@ -1,25 +1,48 @@
 <template>
   <div>
     <h1>Liste des matières premières</h1>
-    Filtre <span @click="filtre=''"> [tout] </span>
-     <span @click="filtre='malt'"> [malt] </span> 
-     <span @click="filtre='houblon'"> [houblon] </span>
-    <span @click="filtre='autre'"> [autre] </span>
-     <span @click="showArchive=!showArchive"> [Montrer les matières archivées] </span>
-    <ul>
-      <li
-        v-for="mp in allMatieresPremieres"
+    Filtre 
+    <b-button-group>
+      <b-button @click="filtre=''"> tout </b-button>
+      <b-button @click="filtre='malt'"> malt</b-button>
+      <b-button @click="filtre='houblon'"> houblon </b-button>
+      <b-button @click="filtre='autre'"> autre </b-button>
+    </b-button-group>
+
+    <b-form-checkbox v-model="showArchive" switch>
+      Montrer les matireres archivées
+    </b-form-checkbox>
+    
+    
+     <b-table-simple hover small caption-top responsive>
+       <b-thead head-variant="dark">
+         <b-tr>
+         <b-th>Nom</b-th>
+         <b-th>Fournisseur</b-th>
+         <b-th>Lot</b-th>
+         <b-th>Date limite</b-th>
+         <b-th>Quantité commandée</b-th>
+         <b-th>Quantité restante</b-th>
+         </b-tr>
+         </b-thead>
+      <b-tbody>
+        <b-tr v-for="mp in allMatieresPremieres"
         :key="mp.ref"
-        @click="selectMP(mp)"
-      >
-        {{ mp.nom }} | {{ mp.fournisseur }} | {{ mp.lot }} |
-        {{ mp.dlc | formatDate }} | {{ mp.qCommande }} |
-        {{ parseInt(mp.qCommande) + parseInt(mp.totalConso) }}
-      </li>
-    </ul>
-    <button @click="showAjoutMP = !showAjoutMP" v-show="!showAjoutMP">
+        @click="selectMP(mp)">
+        <b-td>{{ mp.nom }}</b-td>
+        <b-td>{{ mp.fournisseur }}</b-td>
+        <b-td>{{ mp.lot }}</b-td>
+        <b-td>{{ mp.dlc | formatDate }}</b-td>
+        <b-td>{{ mp.qCommande }}</b-td>
+        <b-td>{{ parseInt(mp.qCommande) + parseInt(mp.totalConso) }}</b-td>
+        </b-tr>
+      </b-tbody>
+     </b-table-simple>
+
+    
+    <b-button @click="showAjoutMP = !showAjoutMP" v-show="!showAjoutMP">
       Ajouter une Matiere Premiere
-    </button>
+    </b-button>
     <AjoutMatierePremiere
       v-if="showAjoutMP"
       @termine="termine"
@@ -44,9 +67,9 @@ export default {
   computed: {
     allMatieresPremieres() {
       if (this.filtre=='') {
-      return this.$store.getters.allMatieresPremieres
+      return this.$store.getters.allMatieresPremieres.filter((mp)=>(!mp.archive||this.showArchive))
       } else {
-        return this.$store.getters.allMatieresPremieres.filter((mp)=>mp.type==this.filtre)
+        return this.$store.getters.allMatieresPremieres.filter((mp)=>(mp.type==this.filtre&&(!mp.archive||this.showArchive)))
       }
     },
     mpDetail() {

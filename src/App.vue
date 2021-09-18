@@ -1,15 +1,16 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/matierespremieres">Matières premières</router-link> |
-      <router-link to="/brassins">Brassins</router-link> |
-      <router-link to="/produits">Produits</router-link>
+      <b-link to="/matierespremieres">Matières premières</b-link> |
+      <b-link to="/brassins">Brassins</b-link> |
+      <b-link to="/produits">Produits</b-link>
     </div>
     <router-view/>
   </div>
 </template>
 
-<style>
+<style lang="scss">
+@import "~@/assets/scss/vendors/bootstrap-vue/index";
 #app {
   text-align: center;
   color: #2c3e50;

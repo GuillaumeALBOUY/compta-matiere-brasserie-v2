@@ -1,17 +1,17 @@
-import '@babel/polyfill'
-import 'mutationobserver-shim'
 import Vue from 'vue'
-import './plugins/bootstrap-vue'
 import VueRouter from 'vue-router'
 import Vuex from 'vuex'
 import App from './App.vue'
 import router from './router'
 import storeDeclaration from './store'
+import Vue from 'vue'
 
 
 Vue.config.productionTip = false;
 Vue.use(VueRouter);
 Vue.use(Vuex);
+Vue.use(BootstrapVue)
+Vue.use(IconsPlugin)
 
 //Filtre de formatage des dates
 Vue.filter('formatDate',
