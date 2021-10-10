@@ -16,11 +16,16 @@ Vue.config.productionTip = false;
 Vue.use(VueRouter);
 Vue.use(Vuex);
 
-//Filtre de formatage des dates
+//Filtres de formatage des dates
 Vue.filter('formatDate',
   (value) => (new Date(value)).toLocaleDateString('fr-FR',
     { weekday: "long", year: "numeric", month: "long", day: "numeric" }))
-
+Vue.filter('formatDateCourt',
+    (value) => (new Date(value)).toLocaleDateString('fr-FR',
+      { year: "numeric", month: "long", day: "numeric" }))
+Vue.filter('formatDateTresCourt',
+      (value) => (new Date(value)).toLocaleDateString('fr-FR',
+        { year: "numeric", month: "numeric", day: "numeric" }))
 
 const store = new Vuex.Store(storeDeclaration)
 

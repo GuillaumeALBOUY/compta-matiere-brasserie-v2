@@ -14,7 +14,7 @@
     </b-button-group>
 
     <b-form-checkbox v-model="showArchive" switch>
-      Montrer les matireres archivées
+      Montrer les matières archivées
     </b-form-checkbox>
     
     
@@ -36,7 +36,7 @@
         <b-td>{{ mp.nom }}</b-td>
         <b-td>{{ mp.fournisseur }}</b-td>
         <b-td>{{ mp.lot }}</b-td>
-        <b-td>{{ mp.dlc | formatDate }}</b-td>
+        <b-td>{{ mp.dlc | formatDateCourt }}</b-td>
         <b-td>{{ mp.qCommande }}</b-td>
         <b-td>{{ parseInt(mp.qCommande) + parseInt(mp.totalConso) }}</b-td>
         </b-tr>

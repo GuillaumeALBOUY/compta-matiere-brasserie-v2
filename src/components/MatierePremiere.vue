@@ -16,7 +16,7 @@
       <b-card-sub-title>Historique</b-card-sub-title>
       <b-list-group>
         <b-list-group-item v-for="mouvement in mp.mouvements" :key="mouvement._id" class="d-flex justify-content-between align-items-center">
-          {{ mouvement.brassin }} {{ mouvement.motif }} <span>{{ mouvement.date | formatDate }} </span> 
+          <span>{{ mouvement.brassin }} {{ mouvement.motif }} </span> <span>{{ mouvement.date | formatDateTresCourt }} </span> 
           <span>{{ mouvement.quantite }}</span> 
           
         </b-list-group-item>

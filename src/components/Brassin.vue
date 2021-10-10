@@ -4,15 +4,34 @@
       <h2>{{ brassin.nom }} du {{ brassin.date | formatDate }}</h2>
 
       <h3>Matières Premières</h3>
-      <ul v-if="matieres.length > 0">
-        <li v-for="matiere in matieres" :key="matiere.ref">
-          {{ matiere.nom }} - {{ matiere.lot }} : {{ matiere.quantite }}
-        </li>
-      </ul>
+      <b-container>
+        <b-table-simple hover small caption-top responsive v-if="matieres.length > 0">
+            <b-thead head-variant="dark">
+              <b-tr>
+                <b-th>
+                  Nom
+                </b-th>
+                <b-th>
+                  Lot
+                </b-th>
+                <b-th>
+                  Quantité
+                </b-th>
+              </b-tr>
+            </b-thead>
+      <b-tbody >
+        <b-tr v-for="matiere in matieres" :key="matiere.ref">
+          <b-td> {{ matiere.nom }} </b-td>
+          <b-td> {{ matiere.lot }} </b-td>
+          <b-td> {{ matiere.quantite }} </b-td>
+        </b-tr>
+      </b-tbody>
+        </b-table-simple>
+      </b-container>
 
-      <button @click="showAjoutMP = !showAjoutMP">
+      <b-button @click="showAjoutMP = !showAjoutMP">
         Modifier les matieres premieres
-      </button>
+      </b-button>
       <AjoutMPBrassin
         v-if="showAjoutMP"
         @termine="termineMP"
@@ -20,31 +39,34 @@
       ></AjoutMPBrassin>
 
       <h3>Produits</h3>
-      <ul v-if="produits.length > 0">
-        <li v-for="produit in produits" :key="produit.ref">
+      
+      <b-list-group v-if="produits.length > 0">
+        <b-list-group-item v-for="produit in produits" :key="produit.ref">
           {{ produit.nom }} - {{ produit.conditionnement }}cl :
           {{ produit.quantite }} unités
-          <button
+          <b-button
             @click="produit.showModif = !produit.showModif"
             v-if="!produit.showModif"
           >
             Produire
-          </button>
-          <span v-if="produit.showModif">
-            <input type="date" v-model="produit.modifDate" />
-            <input type="number" v-model="produit.quantiteProduite" />
-            <button @click="modifProduit(produit)">
+          </b-button>
+          <span v-if="produit.showModif" @submit.stop.prevent="modifProduit(produit)" @reset="produit.showModif = !produit.showModif">
+            <b-form inline>
+            <b-form-input type="date" v-model="produit.modifDate" class="mr-sm-2 mb-sm-0" required/>
+            <b-form-input type="number" v-model="produit.quantiteProduite" class="mb-2 mr-sm-2 mb-sm-0" required/>
+            <b-button type="submit" >
               ajouter
-            </button>
-            <button @click="produit.showModif = !produit.showModif">
+            </b-button>
+            <b-button type="reset" >
               annuler
-            </button>
+            </b-button>
+            </b-form>
           </span>
-        </li>
-      </ul>
-      <button @click="showCreerProduit = !showCreerProduit">
+        </b-list-group-item>
+      </b-list-group>
+      <b-button @click="showCreerProduit = !showCreerProduit">
         Ajouter un conditionnement
-      </button>
+      </b-button>
       <ajout-produit
         v-if="showCreerProduit"
         @termine="termineProduit"
@@ -182,7 +204,7 @@ export default {
     },
   },
 
-  watch: {
+/*  watch: {
     temoinMajMP: {
       handler: function () {
         console.log("watch brassin");
@@ -190,7 +212,7 @@ export default {
       },
       deep: true,
     },
-  },
+  },*/
 
   mounted() {
     this.loadMPBrassin();
