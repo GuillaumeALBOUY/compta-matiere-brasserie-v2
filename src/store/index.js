@@ -11,7 +11,9 @@ export default {
 
   },
   getters: {
-    allMatieresPremieres: (state) => state.matieresPremieres
+    allMatieresPremieres: (state) => state.matieresPremieres,
+    quantiteRestante: (state) => state.detailMatierePremiere.mouvements.reduce((quantite, mouvement) => parseInt(quantite) + parseInt(mouvement.quantite),
+      state.detailMatierePremiere.qCommande)
   },
   mutations: {
     SET_MATIERES_PREMIERES(state, matieresPremieres) {

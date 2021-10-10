@@ -1,22 +1,31 @@
 <template>
   <div>
-    <h2>Détail mp</h2>
+    <h2>Détail</h2>
     <div v-if="mp && mp.nom">
-      <h3>Récap {{ mp.nom }}</h3>
-      Fournisseur {{ mp.fournisseur }}, lot numéro : {{ mp.lot }} <br/>
-      A consomer avant le {{ mp.dlc | formatDate }}
-      Quantité commandée : {{ mp. qCommande }}
-      <h3>Historique</h3>
-      <ul>
-        <li v-for="mouvement in mp.mouvements" :key="mouvement._id">
-          Le {{ mouvement.date | formatDate }}, {{ mouvement.quantite }} pour
-          {{ mouvement.brassin }} {{ mouvement.motif }}
-        </li>
-      </ul>
-      <button @click="showAjoutMv = !showAjoutMv" v-show="!showAjoutMv">
+      <b-card>
+      <b-card-title>
+            Récap {{ mp.nom }}</b-card-title>
+      
+      <b-card-text class='left'>
+        Fournisseur : {{ mp.fournisseur }}, <br/>
+        lot numéro : {{ mp.lot }} <br/>
+        A consomer avant le : {{ mp.dlc | formatDate }}  <br/>
+        Quantité commandée : {{ mp.qCommande }}  <br/>
+        Quantité restante : {{ quantiteRestante }}
+      </b-card-text>
+      <b-card-sub-title>Historique</b-card-sub-title>
+      <b-list-group>
+        <b-list-group-item v-for="mouvement in mp.mouvements" :key="mouvement._id" class="d-flex justify-content-between align-items-center">
+          {{ mouvement.brassin }} {{ mouvement.motif }} <span>{{ mouvement.date | formatDate }} </span> 
+          <span>{{ mouvement.quantite }}</span> 
+          
+        </b-list-group-item>
+      </b-list-group>
+      <b-button @click="showAjoutMv = !showAjoutMv" v-show="!showAjoutMv">
         Ajouter un Mouvement
-      </button>
+      </b-button>
       <AjoutMouvementMP v-if="showAjoutMv" :mp='mp' @termine='termine'></AjoutMouvementMP>
+      </b-card>
 
     </div>
     <span v-else> Selectionner une matiere </span>
@@ -37,6 +46,12 @@ export default {
       showAjoutMv: false,
     };
   },
+  computed: {
+    quantiteRestante() {
+      return this.$store.getters.quantiteRestante;
+    }
+
+  },
   methods: {
     termine(payload) {
       this.showAjoutMv = false;
@@ -45,3 +60,10 @@ export default {
   },
 };
 </script>
+<style lang="scss">
+@import "~@/assets/scss/vendors/bootstrap-vue/index";
+.left {
+  text-align: left;
+}
+
+</style>

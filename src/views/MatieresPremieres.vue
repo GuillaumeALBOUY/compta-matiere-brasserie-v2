@@ -1,7 +1,11 @@
 <template>
   <div>
+ 
+    <b-container fluid>
+      <b-row>
+      <b-col sm='8'>
     <h1>Liste des matières premières</h1>
-    Filtre 
+     
     <b-button-group>
       <b-button @click="filtre=''"> tout </b-button>
       <b-button @click="filtre='malt'"> malt</b-button>
@@ -47,7 +51,14 @@
       v-if="showAjoutMP"
       @termine="termine"
     ></AjoutMatierePremiere>
+      
+      </b-col>
+     
+      <b-col sm='4'>
     <MatierePremiere v-bind:mp="mpDetail"> </MatierePremiere>
+      </b-col>
+      </b-row>
+    </b-container>
   </div>
 </template>
 
