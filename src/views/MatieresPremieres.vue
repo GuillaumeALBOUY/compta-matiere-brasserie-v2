@@ -44,14 +44,14 @@
      </b-table-simple>
 
     
-    <b-button @click="showAjoutMP = !showAjoutMP" v-show="!showAjoutMP">
+    <b-button @click="$bvModal.show('ajoutMatierePremiere')">
       Ajouter une Matiere Premiere
     </b-button>
+    <b-modal id='ajoutMatierePremiere' hide-footer hide-header>
     <AjoutMatierePremiere
-      v-if="showAjoutMP"
-      @termine="termine"
+       @termine="termine"
     ></AjoutMatierePremiere>
-      
+    </b-modal>
       </b-col>
      
       <b-col sm='4'>
@@ -72,7 +72,7 @@ export default {
     return {
       showAjoutMP: false,
       filtre: "",
-      showArchive: false,
+      
     };
   },
   computed: {
@@ -96,7 +96,7 @@ export default {
       this.$store.dispatch("getMatierePremiere", { matierePremiere: mp });
     },
     termine(payload) {
-      this.showAjoutMP = false;
+      this.$bvModal.hide('ajoutMatierePremiere')
       console.log(payload.message);
       //      this.$store.dispatch("getMatieresPremieres");
     },

@@ -1,14 +1,24 @@
 <template>
   <div>
     <h3>Ajout de mouvements</h3>
-    <label for="date"> Date </label>
-    <input type="date" v-model="mv.date" /><br />
-    <label for="quantite"> Quantité </label>
-    <input type="number" v-model="mv.quantite" /><br />
-    <label for="motif"> Motif : </label>
-    <input type="text" v-model="mv.motif" /> <br />
-    <button @click="ajouter">Ajouter</button>
-    <button @click="retour">Annuler</button>
+    <b-form class="form-add" @submit="ajouter" @reset="retour">
+      <b-form-group id="group-date" label="Date :" label-for="date">
+        <b-form-input id="date" type="date" v-model="mv.date" required />
+      </b-form-group>
+      <b-form-group id="group-quantite" label="Quantité :" label-for="quantite">
+        <b-form-input
+          id="quantite"
+          type="number"
+          v-model="mv.quantite"
+          required
+        />
+      </b-form-group>
+      <b-form-group id="group-motif" label="Motif :" label-for="motif">
+        <b-form-input id="motif" type="text" v-model="mv.motif" placeholder="Motif du mouvement" required />
+      </b-form-group>
+      <b-button type="submit">Ajouter</b-button>
+      <b-button type="reset">Annuler</b-button>
+    </b-form>
   </div>
 </template>
 
@@ -31,10 +41,12 @@ export default {
     };
   },
   methods: {
-    retour() {
+    retour(event) {
+      event.preventDefault()
       this.$emit("termine", { message: "Action annulée" });
     },
-    ajouter() {
+    ajouter(event) {
+      event.preventDefault()
       console.log(
         "Mouvement ajouté : " + this.mv.date + " sur " + this.produit.nom
       );
@@ -69,3 +81,10 @@ export default {
   },
 };
 </script>
+<style lang="scss">
+@import "~@/assets/scss/vendors/bootstrap-vue/index";
+.form-add {
+  text-align: left;
+}
+
+</style>

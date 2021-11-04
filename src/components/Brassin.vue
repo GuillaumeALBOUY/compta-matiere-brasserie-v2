@@ -108,6 +108,7 @@ export default {
     termineMP() {
       //console.log('ajout terminé');
       this.showAjoutMP = false;
+      this.loadMPBrassin();
     },
 
     termineProduit() {

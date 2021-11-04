@@ -1,21 +1,39 @@
 <template>
   <div>
-    <h1>Liste des Produits</h1>
-    <ul>
-      <li
-        v-for="produit in produits"
-        :key="produit.ref"
-        @click="selectProduit(produit)"
-      >
-        {{ produit.nom }} | {{ produit.totalStock }} /
-        {{ produit.conditionnement }}cl
-      </li>
-    </ul>
-    <Produit
-      v-if="detailProduit != null"
-      :produit="detailProduit"
-      @misajour="reload(detailProduit)"
-    ></Produit>
+    <b-container fluid>
+      <b-row>
+        <b-col sm="4">
+          <h1>Liste des Produits</h1>
+          <b-table-simple hover small caption-top responsive>
+            <b-thead head-variant="dark">
+              <b-tr>
+                <b-th>Nom</b-th>
+                <b-th>Stock</b-th>
+                <b-th>Conditionnement</b-th>
+              </b-tr>
+            </b-thead>
+            <b-tbody>
+              <b-tr
+                v-for="produit in produits"
+                :key="produit.ref"
+                @click="selectProduit(produit)"
+              >
+                <b-td> {{ produit.nom }} </b-td>
+                <b-td> {{ produit.totalStock }} </b-td>
+                <b-td> {{ produit.conditionnement }}cl </b-td>
+              </b-tr>
+            </b-tbody>
+          </b-table-simple>
+        </b-col>
+        <b-col sm="8">
+          <Produit
+            v-if="detailProduit != null"
+            :produit="detailProduit"
+            @misajour="reload(detailProduit)"
+          ></Produit>
+        </b-col>
+      </b-row>
+    </b-container>
   </div>
 </template>
 

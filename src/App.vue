@@ -1,9 +1,11 @@
 <template>
   <div id="app">
     <div id="nav">
-      <b-link to="/matierespremieres">Matières premières</b-link> |
-      <b-link to="/brassins">Brassins</b-link> |
-      <b-link to="/produits">Produits</b-link>
+      <b-nav tabs>
+      <b-nav-item to="/matierespremieres">Matières premières</b-nav-item> 
+      <b-nav-item to="/brassins">Brassins</b-nav-item> 
+      <b-nav-item to="/produits">Produits</b-nav-item>
+      </b-nav>
     </div>
     <router-view/>
   </div>

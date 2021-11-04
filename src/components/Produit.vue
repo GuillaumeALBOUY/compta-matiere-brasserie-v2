@@ -1,18 +1,31 @@
 <template>
   <div>
     <h2>Historique du produit</h2>
-    {{ produit.nom }} en {{ produit.conditionnement }}cl <span v-if='brassin!=null'> issu du brassin  
-    {{ brassin.nom }} du {{ brassin.date | formatDate }} </span>
+    {{ produit.nom }} en {{ produit.conditionnement }}cl
+    <span v-if="brassin != null">
+      issu du brassin {{ brassin.nom }} du {{ brassin.date | formatDate }}
+    </span>
 
-    <ul v-for="mouvement in produit.mouvements" :key="mouvement._id">
-      <li>
-        {{ mouvement.date | formatDate }} | {{ mouvement.quantite }} | {{ mouvement.motif }}
-      </li>
-    </ul>
+    <b-table-simple hover small caption-top responsive>
+      <b-thead head-variant="dark">
+        <b-tr>
+          <b-th>Date</b-th>
+          <b-th>Quantité</b-th>
+          <b-th>Motif</b-th>
+        </b-tr>
+      </b-thead>
+      <b-tbody>
+        <b-tr v-for="mouvement in produit.mouvements" :key="mouvement._id">
+          <b-td> {{ mouvement.date | formatDateCourt }} </b-td>
+          <b-td> {{ mouvement.quantite }} </b-td>
+          <b-td> {{ mouvement.motif }}</b-td>
+        </b-tr>
+      </b-tbody>
+    </b-table-simple>
 
-    <button @click="showAjoutMouvement = !showAjoutMouvement">
+    <b-button @click="showAjoutMouvement = !showAjoutMouvement">
       Ajouter entrée/sortie
-    </button>
+    </b-button>
     <ajout-mouvement-produit
       v-if="showAjoutMouvement"
       @termine="termine"
@@ -24,7 +37,7 @@
 <script>
 import axios from "axios";
 import api from "../config/url.js";
-import AjoutMouvementProduit from "../components/AjoutMouvementProduit.vue"
+import AjoutMouvementProduit from "../components/AjoutMouvementProduit.vue";
 
 export default {
   props: ["produit"],
@@ -37,7 +50,7 @@ export default {
   },
 
   components: {
-      AjoutMouvementProduit
+    AjoutMouvementProduit,
   },
 
   methods: {
